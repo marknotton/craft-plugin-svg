@@ -10,6 +10,14 @@ class SvgPlugin extends BasePlugin {
     return '0.1';
   }
 
+  public function getSchemaVersion() {
+    return '0.1';
+  }
+
+  public function getDescription() {
+    return 'Impliment SVG files and symbols quickly, with browser checks and fallback images.';
+  }
+
   public function getDeveloper() {
     return 'Yello Studio';
   }

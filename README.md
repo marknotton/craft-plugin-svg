@@ -1,2 +1,2 @@
 # SVG *for Craft CMS*
-Makes the inclusion of SVG files/symbols very easy, with browser checks and fallback images.
+Impliment SVG files and symbols quickly, with browser checks and fallback images.
