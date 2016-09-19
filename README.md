@@ -74,9 +74,11 @@ Load in SVG content with fallbacks for specific browsers.
 | # | Parameter         | Type   | Default                       | Optional | Description
 --- | ----------------- | ------ | ----------------------------- | -------- | -----------
 | 1 | SVG file name     | string | null                          | No       | Enter the name of the svg file. You can omit the '.svg' extension, as this will be added automatically.
-| 2 | Fallback image    | string | Same as first parameter       | Yes      | If a fallback image is not passed the svg filename will used. The image directory will be searched, and various formats will be checked. First match is returned. If a fallback is used, this will be returned in the usual ```<img>``` tag. However, if the fallback is missing, the svg will be used as the source of the ```<img>``` tag instead. You can also use the string 'disable', if you want absolutely no fallbacks.
+| 2 | Fallback image    | string | Same as first parameter       | Yes      | If a fallback image is not passed the svg filename will used. The image directory will be searched, as will the sprites directory, and also various formats will be checked. First match is returned. If a fallback is used, this will be returned in the usual ```<img>``` tag. However, if the fallback is missing, the svg will be used as the source of the ```<img>``` tag instead. You can also use the string 'disable', if you want absolutely no fallbacks.
 | 3 | Browsers to check | string | false                         | Yes      | See [Browser](https://github.com/marknotton/craft-plugin-browser) for documentation
 | 4 | Image directory   | string | environmentVariables > images | Yes      | By default the image location in your general.php Environment Variables will be used by default. However, anything entered in this parameter will overwrite that.
+
+You can change the default image and sprite directories in the SVG plugin settings.
 
 ####Example 1:
 Outputs SVG content
