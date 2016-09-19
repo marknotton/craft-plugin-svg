@@ -8,6 +8,7 @@ Implement SVG files and symbols quickly, with browser checks and fallback images
 
 - [Installation](#installation)
 - [SVG](#svg)
+- [Load SVG](#load-svg)
 - [Symbol](#symbol)
 
 ##Optional tools to increase functionality
@@ -112,3 +113,15 @@ Outputs SVG content, when 'disable' is passed no fallback will be generated at a
 ```
 {{ svg('logo', 'disable', 'chrome') }}
 ```
+
+----
+## Load SVG
+This is essentially just an alias of the above [SVG](#svg) function. Only two parameters can be used though. SVG name and image directory. No fallback will be used, and no browser checks will be made. This simply just outputs the contents of an SVG if it exists.
+```
+{{ loadsvg('sprite-symbols') }}
+```
+
+----
+## Symbol
+
+Coming Soon
