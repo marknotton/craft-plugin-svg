@@ -16,43 +16,70 @@ class svg extends \Twig_Extension {
     );
   }
 
-  // Usage example 1 - {{ svg('logo', 'logo-dark.png', 'ie 9') }}
-  // Outputs SVG content, except for then on IE9 the fallback image is used
+  public function svg($file, $fallback = null, $browsers = null, $imageDir = null) {
 
-  // Usage example 2 - {{ svg('logo', 'logo-dark.png', 'ie < 11') }}
-  // Outputs SVG content, except for browsers that are IE11 and below... the fallback image is used
-
-  // Usage example 3 - {{ svg('logo.svg', 'logo-dark.png') }}
-  // Outputs SVG content, fallsback to .png image when on the unsupported browsers (ie and edge by default)
-
-  // Usage example 4 - {{ svg('logo', null, 'edge') }}
-  // Outputs SVG content, fallsback to a standard <img> element using the .svg file. Unless on Edge
-  
-  // Usage example 5 - {{ svg('logo', 'disable', 'chrome') }}
-  // Outputs SVG content, when 'disabled is passed no fallback will be generated at all'
-
-  public function svg($file, $fallback = null, $browsers = null, $dir = null) {
+    $settings = craft()->plugins->getPlugin('svg')->getSettings();
 
     // Default Directory
-    $dir = is_null($dir) ? craft()->config->get('environmentVariables')["images"] : $dir;
+    if ( empty($imageDir) ) {
+      if ( !empty($settings['imagesDirectory']) ) {
+        // Check settings is defined and set this as the image directory
+        $imageDir = $settings['imagesDirectory'];
+      } else if ( !empty(craft()->config->get('environmentVariables')["images"])) {
+        // Check images Environment Variables is defined and set this as the iamge direcotry
+        $imageDir = craft()->config->get('environmentVariables')["images"];
+      } else {
+        // Fallback to this image directory
+        $imageDir = '/assets/images';
+      }
+    }
 
-    // Ensure the parsed directory only has one '/' at the end of the string
-    $dir = rtrim($dir, '/') . '/';
+    // Ensure the image directory only has one '/' at the end of the string
+    $imageDir = rtrim($imageDir, '/') . '/';
 
-    // Check file extension is svg
+    // Check file extension is svg, otherwise add the '.svg' string.
     $file = (strlen($file) > 4 && substr($file, -4) == '.svg') ? $file : $file.'.svg';
 
     // Set full file url
-    $svgUrl = getcwd().$dir.$file;
-    $spriteUrl = getcwd().$dir.'sprites/'.$file;
+    $svgUrl = getcwd().$imageDir.$file;
 
-    // If svg can't be found, try looking in the sprites directory.
-    $fileUrl = file_exists($svgUrl) ? $svgUrl : (file_exists($spriteUrl) ? $spriteUrl : null);
+    $fileUrl = null;
 
-    // Check for supported browsers using the Browser plugin
+    // Checks to see if the file exists
+    if (file_exists($svgUrl)) {
+      // If the svg file exits, use this;
+      $fileUrl = $svgUrl;
+    } else {
+      // Otherwise check the sprites directory
+      $spriteDir = '/assets/images/sprites';
+
+
+      if ( !empty($settings['spritesDirectory']) ) {
+        // Check settings is defined and set this as the image directory
+        $spriteDir = $settings['spritesDirectory'];
+      } else if ( !empty(craft()->config->get('environmentVariables')["images"])) {
+        // Check images Environment Variables is defined and set this as the iamge direcotry
+        $spriteDir = craft()->config->get('environmentVariables')["images"].'/sprites';
+      }
+
+      // Ensure the sprites image directory only has one '/' at the end of the string
+      $spriteDir = rtrim($spriteDir, '/') . '/';
+
+      if (file_exists(getcwd().$spriteDir.$file)) {
+        $fileUrl = getcwd().$spriteDir.$file;
+      }
+    }
+
+    // When false, no browsers will be checked.
     $unsupportedBrowsers = false;
 
-    if (craft()->svg->plugin('browser') && isset($browsers)) {
+    // Define $browserPlugin as 'true' if the Browser Plugin is installed and enabled.
+    if ($browserPlugin = craft()->plugins->getPlugin('browser', false)) {
+      $browserPlugin = $browserPlugin->isInstalled && $browserPlugin->isEnabled;
+    }
+
+    // If browser plugin is installed and browsers have been passed, do a browser check
+    if ($browserPlugin && isset($browsers)) {
       if (gettype($browsers) == 'array') {
         $unsupportedBrowsers = call_user_func_array(array(craft()->browser, 'is'), $browsers);
       } else {
@@ -62,26 +89,34 @@ class svg extends \Twig_Extension {
 
     // If this browser is supported and the file exists load in all the SVG content directly into the HTML
     if (!$unsupportedBrowsers && !is_null($fileUrl)) {
-      // echo gettype(file_get_contents($svgUrl));
       return file_get_contents($fileUrl);
-    } else {      
+    } else {
       // Create an 'id' based on the filename. Slugify and remove extension
       $id = ElementHelper::createSlug(preg_replace('/.svg$/', '', $file));
 
       // Fallbacks
       if ( $fallback != 'disable' ) {
-        if (is_string($fallback) && isset($fallback)) {
+        if (is_string($fallback) && isset($fallback) && file_exists(getcwd().$imageDir.$fallback)) {
           // Use the fallback image
-          return "<img id='".$id."' src='".$dir.$fallback."' alt='".$id."'>";
+          return "<img id='".$id."' src='".$imageDir.$fallback."' alt='".$id."'>";
+        } else if (file_exists(getcwd().$imageDir.$file)) {
+          // If there is no fallback image, use the .svg as an image source.
+          return "<img id='".$id."' src='".$imageDir.$file."' alt='".$id."'>";
         } else {
-          // If there is no fallback image, use the .svg as an image.
-          return "<img id='".$id."' src='".$dir.$file."' alt='".$id."'>";
+          // If the fallback image doesn't exists, nore does the svg, use the SVG filename and search for any image format matching the name.
+          foreach (['png', 'jpg', 'gif'] as $format) {
+            $fallbackUrl = $imageDir.$id.'.'.$format;
+            if (file_exists(getcwd().$fallbackUrl)) {
+              return "<img id='".$id."' src='".$fallbackUrl."' alt='".$id."'>";
+              break;
+            }
+          }
         }
       }
     }
   }
 
-  public function loadsvg($file = 'sprite-symbols', $id = null, $dir = null) {
-    return $this->svg($file, null, null, $dir);
+  public function loadsvg($file = 'sprite-symbols', $id = null, $imageDir = null) {
+    return $this->svg($file, null, null, $imageDir);
   }
 }

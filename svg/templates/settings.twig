@@ -1,0 +1,20 @@
+{% import "_includes/forms" as forms %}
+<h2>Default Images location</h2>
+{{ forms.textField({
+  label: "Enter the directory your images are located. By leaving this blank the 'environmentVariables > images' variable in the general.php file will be used. If that doesn't exist either, '/assets/images' will be used instead."|t,
+  id: 'imagesDirectory',
+  name: 'imagesDirectory',
+  placeholder: '/assets/images',
+  value: settings.imagesDirectory,
+  errors: settings.getErrors('imagesDirectory'),
+}) }}
+
+<h2>Default Sprites location</h2>
+{{ forms.textField({
+  label: "Enter the directory your svg sprites are located. By leaving this blank the 'environmentVariables > images' variable in the general.php file will be used... with '/sprites' added to the end. If that doesn't exist either, '/assets/images/sprites' will be used instead."|t,
+  id: 'spritesDirectory',
+  name: 'spritesDirectory',
+  placeholder: '/assets/images/sprites',
+  value: settings.spritesDirectory,
+  errors: settings.getErrors('spritesDirectory'),
+}) }}

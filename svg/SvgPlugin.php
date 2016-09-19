@@ -34,6 +34,19 @@ class SvgPlugin extends BasePlugin {
     return 'https://raw.githubusercontent.com/marknotton/craft-plugin-svg/master/svg/releases.json';
   }
 
+  public function getSettingsHtml() {
+    return craft()->templates->render('svg/settings', array(
+      'settings' => $this->getSettings()
+    ));
+  }
+
+  protected function defineSettings() {
+    return array(
+      'imagesDirectory' => array(AttributeType::String, 'default' => ''),
+      'spritesDirectory' => array(AttributeType::String, 'default' => '')
+    );
+  }
+
   public function addTwigExtension() {
     Craft::import('plugins.svg.twigextensions.svg');
     Craft::import('plugins.svg.twigextensions.symbol');
