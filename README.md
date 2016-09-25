@@ -262,7 +262,7 @@ If the browser criteria is not ok, a fallback image will be used instead (if one
 <img class="logo test svg-logo-size" src="/assets/images/logo.png" alt="logo">
 ```
 
-### Example 7
+#### Example 7
 
 To use the same data in Sass, use a Mixin like this:
 
@@ -274,5 +274,5 @@ To use the same data in Sass, use a Mixin like this:
 and pass in the symbol name:
 
 ```
-@include svg('logo')
+@include svg('logo');
 ```
