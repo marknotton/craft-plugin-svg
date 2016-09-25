@@ -3,19 +3,20 @@ namespace Craft;
 
 use Twig_Extension;
 
-class symbol extends \Twig_Extension {
+class sprite extends \Twig_Extension {
 
   public function getName() {
-    return Craft::t('Symbol');
+    return Craft::t('Sprite');
   }
 
   public function getFunctions() {
     return array(
-      'symbol' => new \Twig_Function_Method($this, 'symbol', array('is_safe' => array('html')))
+      'sprite' => new \Twig_Function_Method($this, 'sprite', array('is_safe' => array('html'))),
+      'symbol' => new \Twig_Function_Method($this, 'sprite', array('is_safe' => array('html')))
     );
   }
 
-  public function symbol() {
+  public function sprite() {
 
     // Atleast one symbol string arugment should be passed
     if ( func_num_args() < 1 ){

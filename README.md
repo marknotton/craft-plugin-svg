@@ -9,7 +9,7 @@ Implement SVG files and symbols quickly, with browser checks and fallback images
 - [Installation](#installation)
 - [SVG](#svg)
 - [Load SVG](#load-svg)
-- [Symbol](#symbol)
+- [Sprite](#sprite)
 
 ##Optional tools to increase functionality
 

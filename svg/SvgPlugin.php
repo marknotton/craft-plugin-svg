@@ -49,10 +49,10 @@ class SvgPlugin extends BasePlugin {
 
   public function addTwigExtension() {
     Craft::import('plugins.svg.twigextensions.svg');
-    Craft::import('plugins.svg.twigextensions.symbol');
+    Craft::import('plugins.svg.twigextensions.sprite');
     return array(
       new svg(),
-      new symbol()
+      new sprite()
     );
   }
 }
