@@ -75,19 +75,19 @@ This is essentially just an alias of the above [SVG](#svg) function. Only two pa
 ----
 ## Sprite
 
-Sprite allows you to reuse SVG elements by taking advantage of Symbols and Use tags with Gulp SVG Sprite.
+Sprite allows you to reuse SVG elements by taking advantage of 'Symbols' and 'Use' tags with Gulp SVG Sprite.
 
 ##Installation
 
 It is assumed you have a basic understanding of NPM and Gulp.
 
-Install 'Replace':
-```
-npm install --save-dev gulp-notify
-```
-and 'Gulp SVG Sprite':
+Install 'Gulp SVG Sprite':
 ```
 npm install --save-dev gulp-svg-sprite
+```
+and 'Replace':
+```
+npm install --save-dev gulp-notify
 ```
 
 Add the following to your gulpfile.js and make any directory amends where necessary. As it stands, this assumes you keep your Sass directory outside of your working project directory.
@@ -148,7 +148,7 @@ Lets say you have these svg's in your sprites directory:
 - twitter.svg
 - youtube.svg
 
-When you run the ```gulp svg``` task, three files will be generated. 'sprite-symbols.svg' and 'sprite-views.svg' will be placed in your images directory. ```_svg-symbols.scss``` will be placed in your sass directory. You''ll want to include this in your main global sass/scss file too, along with a variable to your sprites directory (this'll make sense later):
+When you run the ```gulp svg``` task, three files will be generated. 'sprite-symbols.svg' and 'sprite-views.svg' will be placed in your images directory. ```_svg-symbols.scss``` will be placed in your sass directory. You''ll want to import this in your main global sass/scss file too, along with a variable to your sprites directory (this'll make sense later):
 
 ```
 $sprite-url = "/assets/images/sprites";
@@ -158,16 +158,16 @@ $sprite-url = "/assets/images/sprites";
 #### sprite-symbols.svg
 This is a collection of all the SVG's in your sprites directory combined into one single file. Each SVG will now exist as a [symbol](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/symbol). When you use the symbol function, these symbols will be rendered with the [use](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/use) tag.
 
-The gulp task will also add a small CSS style to display none this SVG.
+The gulp task will also add the CSS style 'display:none' to the most parent SVG tag.
 
 #### sprite-views.svg
 This is a collection of all the SVG's in your sprites directory combined into one single file too. These are not hidden, but are laid out in a more conventional sprite sheet format. The positions and sizes of each sprite are defined in the ```_svg-symbols``` file.
 
 The gulp task will add in your css ```$sprite-url``` variable directly into this file.
 
-This 'sprite-view.svg' file will look something like this:
+This 'sprite-view.svg' file will now look something like this:
 
-<img src="http://i.imgur.com/BMrBtyx.jpg" alt="SVG" align="left" height="151" />
+<img src="http://i.imgur.com/BMrBtyx.jpg" alt="SVG" height="151" />
 
 Now you have an idea of what's actually happening. This is how you use it:
 
@@ -204,6 +204,13 @@ Read more on how to use these
 }}
 ```
 
+View
+
+```
+@mixin svg($class) {
+  @extend .svg-#{$class}-size, .svg-#{$class};
+}
+```
 
 {{ symbol('logo') }}             // Will simply use the logo symbol. By default the size class will be added automatically
 {{ symbol('logo', true) }}       // Will automatically try to find a fallback image based of the first paramater string. And will fallback to d for ie 9 and 10
