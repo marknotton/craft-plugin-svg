@@ -148,10 +148,10 @@ Lets say you have these svg's in your sprites directory:
 - twitter.svg
 - youtube.svg
 
-When you run the ```gulp svg``` task, three files will be generated. 'sprite-symbols.svg' and 'sprite-views.svg' will be placed in your images directory. ```_svg-symbols.scss``` will be placed in your sass directory. You''ll want to import this in your main global sass/scss file too, along with a variable to your sprites directory (this'll make sense later):
+When you run the ```gulp svg``` task, three files will be generated. 'sprite-symbols.svg' and 'sprite-views.svg' will be placed in your images directory. _svg-symbols.scss will be placed in your sass directory. You''ll want to import this in your main global sass/scss file too, along with a variable to your sprites directory (this'll make sense later):
 
 ```
-$sprite-url = "/assets/images/sprites";
+$sprite-url : "/assets/images/sprites";
 @import "_svg-symbols";
 ```
 
@@ -161,7 +161,7 @@ This is a collection of all the SVG's in your sprites directory combined into on
 The gulp task will also add the CSS style 'display:none' to the most parent SVG tag.
 
 #### sprite-views.svg
-This is a collection of all the SVG's in your sprites directory combined into one single file too. These are not hidden, but are laid out in a more conventional sprite sheet format. The positions and sizes of each sprite are defined in the ```_svg-symbols``` file.
+This is a collection of all the SVG's in your sprites directory combined into one single file too. These are not hidden, but are laid out in a more conventional sprite sheet format. The positions and sizes of each sprite are defined in the '_svg-symbols' file.
 
 The gulp task will add in your css ```$sprite-url``` variable directly into this file.
 
@@ -171,31 +171,72 @@ This 'sprite-view.svg' file will now look something like this:
 
 Now you have an idea of what's actually happening. This is how you use it:
 
-## Usage
+## Usage in Twig
 
-Read more on how to use these
+First you need to have your 'sprite-symbol' loaded somewhere in your HTML. Generally I tend to add it just before the ```</body>``` close tag using the [loadsvg](#load-svg) function:
+
+```
+{{ loadsvg('sprite-symbols') }}
+```
+
+The Twig function called 'symbol' can have up to 2 parameters passed into is.
 
 | # | Parameter   | Type                           | Default  | Optional | Description
 --- | ----------- | ------------------------------ | -------- | -------- | -----------
 | 1 | Sprite name | string                         | null     | No       | Your sprite names are defined by their original file name. So 'Logo.svg' becomes 'logo'.
 | 2 | Special     | Boolean, String, Array, Object | null     | Yes      | You can quickly define either a fallback, size, or browser option here. If you would like to use multiple options, you can define an associative array instead. See bellow arguments table for more information.
 
+If the second parameter is an associative array, these are to settings you can use:
+
 | # | Arguments | Type              | Description
 --- | --------- | ----------------- | -----------
 | 1 | fallback  | string or boolean | If Boolean is ```true``` an attempt to find a fallback image if necessary will be made. The first parameter string will be used, and any matching images in any format will will be used. ```false``` and no fallback will be used. If a string is used, this string will be used, assuming it resides in the given images directory (this can be defined int he SVG plugin settings).
 | 2 | directory | string            | environmentVariables > images + '/sprites' | Yes | By default the sprites location in your general.php Environment Variables will be used by default. However, anything entered in this parameter will overwrite that.
-| 3 | size      | string            | Because sprites don't necessarily have predefined dimensions, you can pass in a string of one or two numbers too add width and height to the sprite. Examples: ```true```, ```false```, ```100 null```, ```null 100```, ```250 400```, ```[100, 200]```
+| 3 | size      | string, array     | Because sprites don't necessarily have predefined dimensions, you can pass in a string of one or an array of two numbers; which will add width and height to the sprite. Examples: ```true``` is the default and will add the given dimensions defined from the '_sprites-symbol' file, ```false``` no dimensions will be added, ```100``` width and height will be set to 100, ```[null, 100]```, only the height will be added ```[250, 400]``` width will be 250px and height will be 400px
 | 1 | browser   | string            | See [Browser](https://github.com/marknotton/craft-plugin-browser) for documentation. If the browser criteria is a match, a fallback image will be used instead of an SVG... if it exists.
-| 3 | class     | string            | Add a class directory onto the sprite.
+| 3 | class     | string            | Add a class directly onto the sprite.
 
 #### Example 1
 
+This will look for the logo svg symbol. If it can't be found a fallback will be used. If no fallbacks are found, nothing get output
+```
+{{ symbol('logo') }}
+```
+
+#### Example 2
+
+No fallback image will be used if the logo symbol can't be found
+```
+{{ symbol('logo', false) }}
+```
+
+#### Example 3
+
+Will automatically try to find a fallback image for Firefox browsers
+```
+{{ symbol('logo', 'firefox') }}
+```
+
+#### Example 4
+
+Will output at 100px in width and height
+```
+{{ symbol('logo', '100') }}
+```
+
+#### Example 5
+
+Will output at 20px in width and 50% height
+```
+{{ symbol('logo', '20px 50%') }}
+```
+
+#### Example 6
 ```
 {{
  symbol('logo',
    {
      fallback : 'logo.png',
-     directory : '/assets/images/svgs',
      browsers : 'ie 9',
      size : true
      class : 'test'
@@ -203,15 +244,35 @@ Read more on how to use these
  )
 }}
 ```
+#### Example 6-A Output
 
-View
+If the browser criteria is ok, and the '_spite-symbol' was imported correctly; this will be output:
+
+```
+<svg class="logo test svg-logo-size">
+	<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#logo"></use>
+</svg>
+```
+
+#### Example 6-B Output
+
+If the browser criteria is not ok, a fallback image will be used instead (if one can be found)
+
+```
+<img class="logo test svg-logo-size" src="/assets/images/logo.png" alt="logo">
+```
+
+### Example 7
+
+To use the same data in Sass, use a Mixin like this:
 
 ```
 @mixin svg($class) {
   @extend .svg-#{$class}-size, .svg-#{$class};
 }
 ```
+and pass in the symbol name:
 
-{{ symbol('logo') }}             // Will simply use the logo symbol. By default the size class will be added automatically
-{{ symbol('logo', true) }}       // Will automatically try to find a fallback image based of the first paramater string. And will fallback to d for ie 9 and 10
-{{ symbol('logo', 'firefox') }}  // Will automatically try to find a fallback image for firefox browsers
+```
+@include svg('logo')
+```

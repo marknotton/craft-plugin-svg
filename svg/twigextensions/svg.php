@@ -116,7 +116,7 @@ class svg extends \Twig_Extension {
     }
   }
 
-  public function loadsvg($file = 'sprite-symbols', $imageDir = null) {
-    return $this->svg($file, 'disable', false, $imageDir);
+  public function loadsvg($file = 'sprite-symbols', $id = null, $imageDir = null) {
+    return $this->svg($file, null, null, $imageDir);
   }
 }
