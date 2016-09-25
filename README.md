@@ -200,41 +200,41 @@ If the second parameter is an associative array, these are to settings you can u
 
 This will look for the logo svg symbol. If it can't be found a fallback will be used. If no fallbacks are found, nothing get output
 ```
-{{ symbol('logo') }}
+{{ sprite('logo') }}
 ```
 
 #### Example 2
 
 No fallback image will be used if the logo symbol can't be found
 ```
-{{ symbol('logo', false) }}
+{{ sprite('logo', false) }}
 ```
 
 #### Example 3
 
 Will automatically try to find a fallback image for Firefox browsers
 ```
-{{ symbol('logo', 'firefox') }}
+{{ sprite('logo', 'firefox') }}
 ```
 
 #### Example 4
 
 Will output at 100px in width and height
 ```
-{{ symbol('logo', '100') }}
+{{ sprite('logo', '100') }}
 ```
 
 #### Example 5
 
 Will output at 20px in width and 50% height
 ```
-{{ symbol('logo', '20px 50%') }}
+{{ sprite('logo', '20px 50%') }}
 ```
 
 #### Example 6
 ```
 {{
- symbol('logo',
+ sprite('logo',
    {
      fallback : 'logo.png',
      browsers : 'ie 9',
@@ -267,12 +267,12 @@ If the browser criteria is not ok, a fallback image will be used instead (if one
 To use the same data in Sass, use a Mixin like this:
 
 ```
-@mixin svg($class) {
+@mixin sprite($class) {
   @extend .svg-#{$class}-size, .svg-#{$class};
 }
 ```
 and pass in the symbol name:
 
 ```
-@include svg('logo');
+@include sprite('logo');
 ```
