@@ -111,7 +111,7 @@ gulp.task('svg', function(){
   }))
 	.pipe(replace("<svg","<svg style='display:none !important;'"))
   .pipe(gulp.dest('/assets/images'))
-  .pipe(notify({"icon": icon_yes, 'title': 'SVG Symbols', 'message': 'SVG Symbols generated Successfully'}));
+  .pipe(notify({'title': 'SVG Symbols', 'message': 'SVG Symbols generated Successfully'}));
 
 	// VIEWS SPRITE
 	gulp.src('/assets/images/sprites/**/*.svg')
@@ -134,7 +134,7 @@ gulp.task('svg', function(){
   }))
 	.pipe(replace('url("sprite-views.svg")','url($sprite-url + "sprite-views.svg")'))
   .pipe(gulp.dest('/assets/images'))
-  .pipe(notify({"icon": icon_yes, 'title': 'SVG View', 'message': 'SVG View Sprite generated Successfully'}));
+  .pipe(notify({'title': 'SVG View', 'message': 'SVG View Sprite generated Successfully'}));
 });
 ```
 
