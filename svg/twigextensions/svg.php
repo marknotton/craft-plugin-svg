@@ -20,17 +20,17 @@ class svg extends \Twig_Extension {
 
     $imageDir = craft()->svg->directory('imagesDirectory','images','/assets/images');
     $spritesDir = craft()->svg->directory('spritesDirectory','sprites','/assets/images/sprites');
-    $sytemRoot = getcwd();
+
+    $systemPath = craft()->plugins->getPlugin('svg')->getSettings()->relativeLocaleDirectories ? getcwd() : $_SERVER['DOCUMENT_ROOT'];
 
     // Check file extension is svg, otherwise add the '.svg' string.
     $file = (strlen($file) > 4 && substr($file, -4) == '.svg') ? $file : $file.'.svg';
-
     // Checks to see if the file exists
-    if (file_exists($sytemRoot.$imageDir.$file)) {
+    if (file_exists($systemPath.$imageDir.$file)) {
       // If the svg file exits, use this;
-      $fileUrl = $sytemRoot.$imageDir.$file;
-    } else if (file_exists($sytemRoot.$spritesDir.$file)) {
-      $fileUrl = $sytemRoot.$spritesDir.$file;
+      $fileUrl = $systemPath.$imageDir.$file;
+    } else if (file_exists($systemPath.$spritesDir.$file)) {
+      $fileUrl = $systemPath.$spritesDir.$file;
     } else {
       $fileUrl = null;
     }

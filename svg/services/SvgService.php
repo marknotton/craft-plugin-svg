@@ -2,6 +2,7 @@
 namespace Craft;
 
 class SvgService extends BaseApplicationComponent {
+
   // For conditions that are dependant on other plugins,
   // perform a quick check to see if a plugin is installed and enabled
   public function plugin($name) {
@@ -12,7 +13,7 @@ class SvgService extends BaseApplicationComponent {
   public function directory($setting, $envVar, $default) {
 
     $settings = craft()->plugins->getPlugin('svg')->getSettings();
-    
+
     // Default Directory
     if ( !empty($settings[$setting]) ) {
       // Check settings is defined and set this as the image directory
@@ -75,4 +76,5 @@ class SvgService extends BaseApplicationComponent {
       return false;
     }
   }
+
 }

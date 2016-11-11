@@ -43,7 +43,8 @@ class SvgPlugin extends BasePlugin {
   protected function defineSettings() {
     return array(
       'imagesDirectory' => array(AttributeType::String, 'default' => ''),
-      'spritesDirectory' => array(AttributeType::String, 'default' => '')
+      'spritesDirectory' => array(AttributeType::String, 'default' => ''),
+      'relativeLocaleDirectories' => array(AttributeType::Bool, 'default' => false)
     );
   }
 
