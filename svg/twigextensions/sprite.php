@@ -29,7 +29,9 @@ class sprite extends \Twig_Extension {
     $browserCriteria = false;
     $imageDir = craft()->svg->directory('imagesDirectory','images','/assets/images');
     $spritesDir = craft()->svg->directory('spritesDirectory','sprites','/assets/images/sprites');
-    $symbolExists = file_exists(getcwd().($spritesDir.$symbol.'.svg'));
+    $systemPath = craft()->plugins->getPlugin('svg')->getSettings()->relativeLocaleDirectories ? getcwd() : $_SERVER['DOCUMENT_ROOT'];
+
+    $symbolExists = file_exists($systemPath.($spritesDir.$symbol.'.svg'));
 
     // Remove the first argument
     if ($settings = func_num_args() == 2 ? func_get_arg(1) : false && !empty($settings)) {
