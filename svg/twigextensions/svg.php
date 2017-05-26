@@ -39,7 +39,10 @@ class svg extends \Twig_Extension {
 
     // If this browser is supported and the file exists load in all the SVG content directly into the HTML
     if (!$unsupportedBrowsers && !is_null($fileUrl)) {
-      return file_get_contents($fileUrl);
+      $content = file_get_contents($fileUrl);
+      $content = str_replace('<?xml version="1.0" encoding="utf-8"?>', '', $content);
+      $content = preg_replace('/<!--(.*)-->/Uis', '', $content);
+      return $content;
     } else if ( $fallback != 'disable' && $unsupportedBrowsers === true) {
       // Create an 'id' based on the filename. Slugify and remove extension
       $id = ElementHelper::createSlug(preg_replace('/.svg$/', '', $file));
