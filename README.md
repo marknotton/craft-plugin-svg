@@ -37,7 +37,7 @@ Outputs SVG content
 Outputs SVG content, with the class "blue"
 ```
 {{ svg('logo', 'blue') }}
-
+```
 
 ----
 ## Load SVG
