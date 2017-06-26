@@ -25,7 +25,7 @@ class sprite extends \Twig_Extension {
 
     $symbol  = is_string(func_get_arg(0)) ? func_get_arg(0) : false;
     $fallback = false;
-    $setSize = true;
+    $setSize = false;
     $browserCriteria = false;
     $imageDir = craft()->svg->directory('imagesDirectory','images','/assets/images');
     $spritesDir = craft()->svg->directory('spritesDirectory','sprites','/assets/images/sprites');
@@ -72,7 +72,10 @@ class sprite extends \Twig_Extension {
     // Size
     $dimensions = '';
 
+    $setSize = isset($settings['size']) && $settings['size'] == true ? true : $setSize;
+
     if ($setSize !== false ) {
+
       $size = is_string($setSize) ? explode(' ', $setSize) : $setSize;
 
       if (is_array($size)) {

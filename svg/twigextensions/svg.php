@@ -35,7 +35,7 @@
 			      $fileUrl = null;
 			    }
 
-					if (is_null($fileUrl)) { return $file; }
+					if (is_null($fileUrl)) { return false; }
 
 					$svgContent = file_get_contents($fileUrl);
 
@@ -59,7 +59,7 @@
 
 							} else {
 
-						    $element->setAttribute('class', $classes);
+						    $element->setAttribute('class', rtrim($classes));
 							}
 					    return $dom->saveXML();
 					    exit;
@@ -68,7 +68,7 @@
 
 			  }
 
-			  public function loadsvg($file = 'sprite-symbols', $id = null, $imageDir = null) {
-			    return $this->svg($file, null, null, $imageDir);
+			  public function loadsvg($file = 'sprite-symbols', $class = null) {
+			    return $this->svg($file, $class);
 			  }
 			}
