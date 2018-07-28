@@ -2,6 +2,8 @@
 
 # SVG *for Craft CMS*
 
+> This plugin is no longer maintained. I'm committing to Craft 3 development only. Feel free to use the source code as you like. If you're looking for a Craft 3 version of this plugin, it's likely I've merged parts or all of this plugin into my [Helpers module.](https://github.com/marknotton/craft-module-helpers)
+
 Implement SVG files and symbols quickly, with browser checks and fallback images.
 
 ## Table of Contents
